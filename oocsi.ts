@@ -10,9 +10,12 @@
 const OOCSI_API_URL = "super.oocsi.net"
 
 namespace oocsi {
+
+    let OOCSIServer = '';
+    let OOCSIClient = 'MicroBit_client_####';
+
     // Flag to indicate whether the blynk data was updated successfully.
     let oocsiUpdated = false
-
 
     /**
      * Return true if OOCSI data was updated successfully.
@@ -25,7 +28,6 @@ namespace oocsi {
     export function isOOCSIUpdated(): boolean {
         return oocsiUpdated
     }
-
 
 
     // /**
@@ -102,6 +104,21 @@ namespace oocsi {
     // }
 
 
+    /**
+     * Connect to OOCSI
+     * @param server OOCSI server.
+     * @param name Client name.
+     */
+    //% subcategory="OOCSI"
+    //% weight=28
+    //% blockGap=8
+    //% blockId=oocsi_connect
+    //% block="connect to OOCSI: Server %channel Name %name"
+    export function connect(server: string, name: string) {
+        OOCSIServer = server;
+        OOCSIClient = name;
+    }
+
 
     /**
      * Send to OOCSI
@@ -128,7 +145,7 @@ namespace oocsi {
         // Construct the data to send.
         const host = 'https://' + OOCSI_API_URL;
         const path = `/send/${channel}`;
-        let data: { [key: string]: string } = { sender: "microbit-testy##" };
+        let data: { [key: string]: string } = { sender: OOCSIClient };
         data[key] = value;
         const body = JSON.stringify(data);
         const contentLength = getByteLength(body);
