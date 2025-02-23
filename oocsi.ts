@@ -128,7 +128,7 @@ namespace esp8266 {
         // Construct the data to send.
         const host = 'https://' + OOCSI_API_URL;
         const path = `/send/${channel}`;
-        let data = {};
+        let data = {sender: "microbit-testy##"};
         data[key] = value;
         const body = JSON.stringify(data);
         const contentLength = Buffer.byteLength(body);
