@@ -7,10 +7,10 @@
  *******************************************************************************/
 
 /**
- * Blocks for ESP8266 WiFi module.
+ * Blocks for OOCSI connectivity via ESP8266 WiFi module.
  */
-//% weight=10 color=#ff8000 icon="\uf1eb" block="ESP8266 WiFi"
-namespace esp8266 {
+//% weight=10 color=#9236A4 icon="\uf1eb" block="OOCSI ESP8266"
+namespace oocsi {
     // Flag to indicate whether the ESP8266 was initialized successfully.
     let esp8266Initialized = false
 

@@ -9,7 +9,7 @@
 // Telegram API url.
 const OOCSI_API_URL = "super.oocsi.net"
 
-namespace esp8266 {
+namespace oocsi {
     // Flag to indicate whether the blynk data was updated successfully.
     let blynkUpdated = false
 
