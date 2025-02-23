@@ -128,10 +128,10 @@ namespace oocsi {
         // Construct the data to send.
         const host = 'https://' + OOCSI_API_URL;
         const path = `/send/${channel}`;
-        let data = {sender: "microbit-testy##"};
+        let data: { [key: string]: string } = { sender: "microbit-testy##" };
         data[key] = value;
         const body = JSON.stringify(data);
-        const contentLength = Buffer.byteLength(body);
+        const contentLength = getByteLength(body);
 
         const rawRequest = 
         `POST ${path} HTTP/1.1
@@ -168,5 +168,30 @@ namespace oocsi {
         // telegramMessageSent = true
 
         return
+    }
+
+    function getByteLength(str: string): number {
+      let byteLength = 0;
+
+      for (let i = 0; i < str.length; i++) {
+        const codePoint = str.charCodeAt(i);
+
+        if (codePoint <= 0x7F) {
+          // 1 byte for ASCII characters (0x00 to 0x7F)
+          byteLength += 1;
+        } else if (codePoint <= 0x7FF) {
+          // 2 bytes for characters (0x80 to 0x7FF)
+          byteLength += 2;
+        } else if (codePoint >= 0xD800 && codePoint <= 0xDBFF) {
+          // Surrogate pair (4 bytes for characters outside BMP)
+          byteLength += 4;
+          i++; // Skip the next code unit (low surrogate)
+        } else {
+          // 3 bytes for characters (0x800 to 0xFFFF)
+          byteLength += 3;
+        }
+      }
+
+      return byteLength;
     }
 }
