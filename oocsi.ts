@@ -142,26 +142,36 @@ namespace oocsi {
         // Connect to Telegram. Return if failed.
         if (sendCommand("AT+CIPSTART=\"SSL\",\"" + OOCSI_API_URL + "\",443", "OK", 10000) == false) return
 
+
         // Construct the data to send.
-        const host = 'https://' + OOCSI_API_URL;
-        const path = `/send/${channel}`;
-        let data: { [key: string]: string } = { sender: OOCSIClient };
-        data[key] = value;
-        const body = JSON.stringify(data);
-        const contentLength = getByteLength(body);
-
-        const rawRequest = 
-`POST ${path} HTTP/1.1
-Host: ${host}
-Content-Type: application/json
-Content-Length: ${contentLength}
-
-${body}`;
-
+        let data = "GET /send/" + formatUrl(channel) + "/" + formatUrl(key + "=" + value)
+        data += " HTTP/1.1\r\n"
+        data += "Host: " + OOCSI_API_URL + "\r\n"
 
         // Send the data.
-        sendCommand("AT+CIPSEND=" + (rawRequest.length + 2))
-        sendCommand(rawRequest)
+        sendCommand("AT+CIPSEND=" + (data.length + 2))
+        sendCommand(data)
+
+//         // Construct the data to send.
+//         const host = 'https://' + OOCSI_API_URL;
+//         const path = `/send/${channel}`;
+//         let data: { [key: string]: string } = { sender: OOCSIClient };
+//         data[key] = value;
+//         const body = JSON.stringify(data);
+//         const contentLength = getByteLength(body);
+
+//         const rawRequest = 
+// `POST ${path} HTTP/1.1
+// Host: ${host}
+// Content-Type: application/json
+// Content-Length: ${contentLength}
+
+// ${body}`;
+
+
+//         // Send the data.
+//         sendCommand("AT+CIPSEND=" + (rawRequest.length + 2))
+//         sendCommand(rawRequest)
 
         // // Return if "SEND OK" is not received.
         // if (getResponse("SEND OK", 1000) == "") {
