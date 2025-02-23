@@ -136,8 +136,8 @@ namespace oocsi {
         // Reset the upload successful flag.
         oocsiUpdated = false
 
-        // Make sure the WiFi is connected.
-        if (isWifiConnected() == false) return
+        // // Make sure the WiFi is connected.
+        // if (isWifiConnected() == false) return
 
         // Connect to Telegram. Return if failed.
         if (sendCommand("AT+CIPSTART=\"SSL\",\"" + OOCSI_API_URL + "\",443", "OK", 10000) == false) return
