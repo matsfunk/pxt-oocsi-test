@@ -1,21 +1,17 @@
 /*******************************************************************************
- * Functions for Blynk
+ * Functions for OOCSI
  *
- * Company: Cytron Technologies Sdn Bhd
- * Website: http://www.cytron.io
- * Email:   support@cytron.io
+ * Company: Mathias Funk, Industrial Design, TU/e
+ * Website: http://oocsi.net
+ * Email:   m.funk@tue.nl
  *******************************************************************************/
 
-
+// Telegram API url.
+const OOCSI_API_URL = "super.oocsi.net"
 
 namespace esp8266 {
     // Flag to indicate whether the blynk data was updated successfully.
     let blynkUpdated = false
-
-    // Blynk servers.
-    let blynkServers = ["blynk.cloud", "fra1.blynk.cloud", "lon1.blynk.cloud",
-                        "ny3.blynk.cloud", "sgp1.blynk.cloud", "blr1.blynk.cloud", "iot.serangkota.go.id"]
-
 
 
     /**
@@ -108,74 +104,68 @@ namespace esp8266 {
 
 
     /**
-     * Write to Blynk.
-     * @param authToken Blynk's authentification token.
-     * @param pin Write to this pin.
-     * @param value Value of the pin.
+     * Send to OOCSI
+     * @param channel OOCSI channel.
+     * @param key Key to send.
+     * @param value Value to send.
      */
-    //% subcategory="Blynk"
+    //% subcategory="OOCSI"
     //% weight=28
     //% blockGap=8
-    //% blockId=esp8266_write_blynk
-    //% block="write Blynk: Token %authToken Pin %pin Value %value"
-    export function writeBlynk(authToken: string, pin: string, value: string) {
+    //% blockId=oocsi_write
+    //% block="send to OOCSI: Channel %channel Key %key Value %value"
+    export function sendData(channel: string, key: string, value: string) {
 
-        // Reset the upload successful flag.
-        blynkUpdated = false
+        // // Reset the upload successful flag.
+        // blynkUpdated = false
 
         // Make sure the WiFi is connected.
         if (isWifiConnected() == false) return
 
-        // Loop through all the blynk servers.
-        for (let i = 0; i < blynkServers.length; i++) {
-            // Connect to Blynk.
-            if (sendCommand("AT+CIPSTART=\"TCP\",\"" + blynkServers[i] + "\",80", "OK", 5000) == true) {
+        // Connect to Telegram. Return if failed.
+        if (sendCommand("AT+CIPSTART=\"SSL\",\"" + OOCSI_API_URL + "\",443", "OK", 10000) == false) return
 
-                // Construct the data to send.
-                // http://blynk.cloud/external/api/update?token={token}&{pin}={value}
-                let data = "GET /external/api/update?token=" + authToken + "&" + pin + "=" + formatUrl(value) + " HTTP/1.1\r\n"
+        // Construct the data to send.
+        const host = 'https://' + OOCSI_API_URL;
+        const path = `/send/${channel}`;
+        let data = {};
+        data[key] = value;
+        const body = JSON.stringify(data);
+        const contentLength = Buffer.byteLength(body);
 
-                // Send the data.
-                sendCommand("AT+CIPSEND=" + (data.length + 2), "OK")
-                sendCommand(data)
+        const rawRequest = 
+        `POST ${path} HTTP/1.1
+        Host: ${host}
+        Content-Type: application/json
+        Content-Length: ${contentLength}
 
-                // Verify if "SEND OK" is received.
-                if (getResponse("SEND OK", 5000) != "") {
+        ${body}`;
 
-                    // Make sure Blynk response is 200.
-                    if (getResponse("HTTP/1.1", 5000).includes("200 OK")) {
 
-                        // Get the pin value.
-                        // It should be the last line in the response.
-                        while (true) {
-                            let response = getResponse("", 200)
-                            if (response == "") {
-                                break
-                            } else {
-                                value = response
-                            }
-                        }
+        // Send the data.
+        sendCommand("AT+CIPSEND=" + (rawRequest.length + 2))
+        sendCommand(rawRequest)
 
-                        // Set the upload successful flag.
-                        blynkUpdated = true
-                    }
-                }
-            }
+        // // Return if "SEND OK" is not received.
+        // if (getResponse("SEND OK", 1000) == "") {
+        //     // Close the connection and return.
+        //     sendCommand("AT+CIPCLOSE", "OK", 1000)
+        //     return
+        // }
 
-            // Close the connection.
-            sendCommand("AT+CIPCLOSE", "OK", 1000)
+        // // Validate the response from Telegram.
+        // let response = getResponse("\"ok\":true", 1000)
+        // if (response == "") {
+        //     // Close the connection and return.
+        //     sendCommand("AT+CIPCLOSE", "OK", 1000)
+        //     return
+        // }
 
-            // If blynk is updated successfully.
-            if (blynkUpdated == true) {
-                // Rearrange the Blynk servers array to put the correct server at first location.
-                let server = blynkServers[i]
-                blynkServers.splice(i, 1)
-                blynkServers.unshift(server)
+        // Close the connection.
+        sendCommand("AT+CIPCLOSE", "OK", 1000)
 
-                break
-            }
-
-        }
+        // Set the upload successful flag and return.
+        // telegramMessageSent = true
 
         return
     }
