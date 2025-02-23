@@ -11,95 +11,95 @@ const OOCSI_API_URL = "super.oocsi.net"
 
 namespace oocsi {
     // Flag to indicate whether the blynk data was updated successfully.
-    let blynkUpdated = false
+    let oocsiUpdated = false
 
 
     /**
-     * Return true if Blynk data was updated successfully.
+     * Return true if OOCSI data was updated successfully.
      */
-    //% subcategory="Blynk"
+    //% subcategory="OOCSI"
     //% weight=30
     //% blockGap=8
-    //% blockId=esp8266_is_blynk_data_updated
-    //% block="Blynk updated"
-    export function isBlynkUpdated(): boolean {
-        return blynkUpdated
+    //% blockId=esp8266_is_oocsi_data_updated
+    //% block="OOCSI updated"
+    export function isOOCSIUpdated(): boolean {
+        return oocsiUpdated
     }
 
 
 
-    /**
-     * Read from Blynk and return the pin value as string.
-     * @param authToken Blynk's authentification token.
-     * @param pin Pin we want to read.
-     */
-    //% subcategory="Blynk"
-    //% weight=29
-    //% blockGap=8
-    //% blockId=esp8266_read_blynk
-    //% block="read Blynk: Token %authToken Pin %pin"
-    export function readBlynk(authToken: string, pin: string): string {
-        let value = ""
+    // /**
+    //  * Read from Blynk and return the pin value as string.
+    //  * @param authToken Blynk's authentification token.
+    //  * @param pin Pin we want to read.
+    //  */
+    // //% subcategory="Blynk"
+    // //% weight=29
+    // //% blockGap=8
+    // //% blockId=esp8266_read_blynk
+    // //% block="read Blynk: Token %authToken Pin %pin"
+    // export function readBlynk(authToken: string, pin: string): string {
+    //     let value = ""
 
-        // Reset the upload successful flag.
-        blynkUpdated = false
+    //     // Reset the upload successful flag.
+    //     blynkUpdated = false
 
-        // Make sure the WiFi is connected.
-        if (isWifiConnected() == false) return value
+    //     // Make sure the WiFi is connected.
+    //     if (isWifiConnected() == false) return value
 
-        // Loop through all the blynk servers.
-        for (let i = 0; i < blynkServers.length; i++) {
-            // Connect to Blynk.
-            if (sendCommand("AT+CIPSTART=\"TCP\",\"" + blynkServers[i] + "\",80", "OK", 5000) == true) {
+    //     // Loop through all the blynk servers.
+    //     for (let i = 0; i < blynkServers.length; i++) {
+    //         // Connect to Blynk.
+    //         if (sendCommand("AT+CIPSTART=\"TCP\",\"" + blynkServers[i] + "\",80", "OK", 5000) == true) {
 
-                // Construct the data to send.
-                // http://blynk.cloud/external/api/get?token={token}&{pin}
-                let data = "GET /external/api/get?token=" + authToken + "&" + pin + " HTTP/1.1\r\n"
+    //             // Construct the data to send.
+    //             // http://blynk.cloud/external/api/get?token={token}&{pin}
+    //             let data = "GET /external/api/get?token=" + authToken + "&" + pin + " HTTP/1.1\r\n"
 
-                // Send the data.
-                sendCommand("AT+CIPSEND=" + (data.length + 2), "OK")
-                sendCommand(data)
+    //             // Send the data.
+    //             sendCommand("AT+CIPSEND=" + (data.length + 2), "OK")
+    //             sendCommand(data)
 
-                // Verify if "SEND OK" is received.
-                if (getResponse("SEND OK", 5000) != "") {
+    //             // Verify if "SEND OK" is received.
+    //             if (getResponse("SEND OK", 5000) != "") {
 
-                    // Make sure Blynk response is 200.
-                    if (getResponse("HTTP/1.1", 5000).includes("200 OK")) {
+    //                 // Make sure Blynk response is 200.
+    //                 if (getResponse("HTTP/1.1", 5000).includes("200 OK")) {
 
-                        // Get the pin value.
-                        // It should be the last line in the response.
-                        while (true) {
-                            let response = getResponse("", 200)
-                            if (response == "") {
-                                break
-                            } else {
-                                value = response
-                            }
-                        }
+    //                     // Get the pin value.
+    //                     // It should be the last line in the response.
+    //                     while (true) {
+    //                         let response = getResponse("", 200)
+    //                         if (response == "") {
+    //                             break
+    //                         } else {
+    //                             value = response
+    //                         }
+    //                     }
 
-                        // Set the upload successful flag.
-                        blynkUpdated = true
-                    }
-                }
-            }
+    //                     // Set the upload successful flag.
+    //                     blynkUpdated = true
+    //                 }
+    //             }
+    //         }
 
-            // Close the connection.
-            sendCommand("AT+CIPCLOSE", "OK", 1000)
+    //         // Close the connection.
+    //         sendCommand("AT+CIPCLOSE", "OK", 1000)
 
-            // If blynk is updated successfully.
-            if (blynkUpdated == true) {
-                // Rearrange the Blynk servers array to put the correct server at first location.
-                let server = blynkServers[i]
-                blynkServers.splice(i, 1)
-                blynkServers.unshift(server)
+    //         // If blynk is updated successfully.
+    //         if (blynkUpdated == true) {
+    //             // Rearrange the Blynk servers array to put the correct server at first location.
+    //             let server = blynkServers[i]
+    //             blynkServers.splice(i, 1)
+    //             blynkServers.unshift(server)
 
-                break
-            }
+    //             break
+    //         }
 
-        }
+    //     }
 
-        return value
-    }
+    //     return value
+    // }
 
 
 
@@ -116,8 +116,8 @@ namespace oocsi {
     //% block="send to OOCSI: Channel %channel Key %key Value %value"
     export function sendData(channel: string, key: string, value: string) {
 
-        // // Reset the upload successful flag.
-        // blynkUpdated = false
+        // Reset the upload successful flag.
+        oocsiUpdated = false
 
         // Make sure the WiFi is connected.
         if (isWifiConnected() == false) return
