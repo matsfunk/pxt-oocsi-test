@@ -151,12 +151,12 @@ namespace oocsi {
         const contentLength = getByteLength(body);
 
         const rawRequest = 
-        `POST ${path} HTTP/1.1
-        Host: ${host}
-        Content-Type: application/json
-        Content-Length: ${contentLength}
+`POST ${path} HTTP/1.1
+Host: ${host}
+Content-Type: application/json
+Content-Length: ${contentLength}
 
-        ${body}`;
+${body}`;
 
 
         // Send the data.
