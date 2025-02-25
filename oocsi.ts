@@ -122,7 +122,7 @@ namespace oocsi {
 
         pause(1000)
 
-        let data = OOCSI_Client + "\r\n"
+        let data = OOCSIClient + "\r\n"
         sendCommand("AT+CIPSEND=" + (data.length + 2))
         sendCommand(data)
 
