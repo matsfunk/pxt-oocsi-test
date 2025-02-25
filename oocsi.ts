@@ -8,7 +8,7 @@
 
 namespace oocsi {
 
-    let lastMessage = {};
+    let lastMessage : any = {};
 
     /**
      * Connect to OOCSI
@@ -88,7 +88,7 @@ namespace oocsi {
     //% block="get value from last OOCSI message"
     export function get(key: string, defaultValue: string) : string {
 
-        return lastMessage != undefined && lastMessage[key] ? lastMessage[key] : defaultValue;
+        return lastMessage != undefined && key in lastMessage ? lastMessage[key] : defaultValue;
         
     }
 
