@@ -129,7 +129,7 @@ namespace oocsi {
         pause(200)
 
         // TODO check whether we have received a "welcome"
-        let response = getResponse("welcome")
+        //let response = getResponse("welcome")
     }
 
 
