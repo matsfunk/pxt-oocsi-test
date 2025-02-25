@@ -42,9 +42,6 @@ namespace oocsi {
     //% block="send to OOCSI: Channel %channel Key %key Value %value"
     export function sendData(channel: string, key: string, value: string) {
 
-        // Reset the upload successful flag.
-        oocsiUpdated = false
-
         // Make sure the WiFi is connected.
         if (isWifiConnected() == false) return
 
