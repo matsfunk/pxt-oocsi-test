@@ -8,6 +8,8 @@
 
 namespace oocsi {
 
+    let lastMessage = {};
+
     /**
      * Connect to OOCSI
      * @param server OOCSI server. eg: "super.oocsi.net"
@@ -29,7 +31,6 @@ namespace oocsi {
 
     }
 
-
     /**
      * Send to OOCSI
      * @param channel OOCSI channel.
@@ -40,7 +41,7 @@ namespace oocsi {
     //% blockGap=8
     //% blockId=oocsi_send
     //% block="send to OOCSI: Channel %channel Key %key Value %value"
-    export function sendData(channel: string, key: string, value: string) {
+    export function send(channel: string, key: string, value: string) {
 
         // Make sure the WiFi is connected.
         if (isWifiConnected() == false) return
@@ -50,6 +51,45 @@ namespace oocsi {
         sendCommand("AT+CIPSEND=" + (data.length + 2))
         sendCommand(data)
 
+    }
+
+    /**
+     * Check for new incoming OOCSI messages
+     */
+    //% weight=18
+    //% blockGap=8
+    //% blockId=oocsi_check
+    //% block="check OOCSI"
+    export function check() : boolean {
+
+        // Make sure the WiFi is connected.
+        if (isWifiConnected() == false) return false
+
+        let line = getResponse("", 500)
+
+        // try parse
+        try {
+            lastMessage = JSON.parse(line)
+            return true
+        } catch(err) {
+            return false            
+        }
+        
+    }
+
+    /**
+     * Get a value from the last OOCSI message
+     * @param key Key of the value.
+     * @param defaultValue Default value in case there is no value for the key.
+     */
+    //% weight=17
+    //% blockGap=8
+    //% blockId=oocsi_get
+    //% block="get value from last OOCSI message"
+    export function get(key: string, defaultValue: string) : string {
+
+        return lastMessage != undefined && lastMessage[key] ? lastMessage[key] : defaultValue;
+        
     }
 
 }
