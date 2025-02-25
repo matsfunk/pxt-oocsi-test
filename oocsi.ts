@@ -117,6 +117,19 @@ namespace oocsi {
     export function connect(server: string, name: string) {
         OOCSIServer = server;
         OOCSIClient = name;
+
+        sendCommand("AT+CIPSTART=\"TCP\",\"" + OOCSIServer + "\",4444", "OK", 10000)
+
+        pause(1000)
+
+        let data = OOCSI_Client + "\r\n"
+        sendCommand("AT+CIPSEND=" + (data.length + 2))
+        sendCommand(data)
+
+        pause(200)
+
+        // TODO check whether we have received a "welcome"
+        let response = getResponse("welcome")
     }
 
 
@@ -129,56 +142,20 @@ namespace oocsi {
     //% subcategory="OOCSI"
     //% weight=28
     //% blockGap=8
-    //% blockId=oocsi_write
+    //% blockId=oocsi_send
     //% block="send to OOCSI: Channel %channel Key %key Value %value"
     export function sendData(channel: string, key: string, value: string) {
 
         // Reset the upload successful flag.
         oocsiUpdated = false
 
-        // // Make sure the WiFi is connected.
-        // if (isWifiConnected() == false) return
+        // Make sure the WiFi is connected.
+        if (isWifiConnected() == false) return
 
-        // Connect to Telegram. Return if failed.
-        if (sendCommand("AT+CIPSTART=\"SSL\",\"" + OOCSI_API_URL + "\",443", "OK", 10000) == false) return
-
-
-        // Construct the data to send.
-        let data = "GET /send/" + formatUrl(channel) + "/" + formatUrl(key + "=" + value)
-        data += " HTTP/1.1\r\n"
-        data += "Host: " + OOCSI_API_URL + "\r\n"
-
-        // Send the data.
+        // prepare and send data
+        let data = `sendjson ${channel} {"${key}": "${value}"}` + "\r\n"
         sendCommand("AT+CIPSEND=" + (data.length + 2))
         sendCommand(data)
-
-//         // Construct the data to send.
-//         const host = 'https://' + OOCSI_API_URL;
-//         const path = `/send/${channel}`;
-//         let data: { [key: string]: string } = { sender: OOCSIClient };
-//         data[key] = value;
-//         const body = JSON.stringify(data);
-//         const contentLength = getByteLength(body);
-
-//         const rawRequest = 
-// `POST ${path} HTTP/1.1
-// Host: ${host}
-// Content-Type: application/json
-// Content-Length: ${contentLength}
-
-// ${body}`;
-
-
-//         // Send the data.
-//         sendCommand("AT+CIPSEND=" + (rawRequest.length + 2))
-//         sendCommand(rawRequest)
-
-        // // Return if "SEND OK" is not received.
-        // if (getResponse("SEND OK", 1000) == "") {
-        //     // Close the connection and return.
-        //     sendCommand("AT+CIPCLOSE", "OK", 1000)
-        //     return
-        // }
 
         // // Validate the response from Telegram.
         // let response = getResponse("\"ok\":true", 1000)
@@ -188,8 +165,8 @@ namespace oocsi {
         //     return
         // }
 
-        // Close the connection.
-        sendCommand("AT+CIPCLOSE", "OK", 1000)
+        // // Close the connection.
+        // sendCommand("AT+CIPCLOSE", "OK", 1000)
 
         // Set the upload successful flag and return.
         // telegramMessageSent = true
@@ -197,28 +174,4 @@ namespace oocsi {
         return
     }
 
-    function getByteLength(str: string): number {
-      let byteLength = 0;
-
-      for (let i = 0; i < str.length; i++) {
-        const codePoint = str.charCodeAt(i);
-
-        if (codePoint <= 0x7F) {
-          // 1 byte for ASCII characters (0x00 to 0x7F)
-          byteLength += 1;
-        } else if (codePoint <= 0x7FF) {
-          // 2 bytes for characters (0x80 to 0x7FF)
-          byteLength += 2;
-        } else if (codePoint >= 0xD800 && codePoint <= 0xDBFF) {
-          // Surrogate pair (4 bytes for characters outside BMP)
-          byteLength += 4;
-          i++; // Skip the next code unit (low surrogate)
-        } else {
-          // 3 bytes for characters (0x800 to 0xFFFF)
-          byteLength += 3;
-        }
-      }
-
-      return byteLength;
-    }
 }
