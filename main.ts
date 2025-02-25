@@ -1,5 +1,5 @@
 /*******************************************************************************
- * MakeCode extension for ESP8266 Wifi module.
+ * MakeCode extension for OOCSI via ESP8266 Wifi module.
  *
  * Company: Cytron Technologies Sdn Bhd
  * Website: http://www.cytron.io
@@ -16,8 +16,6 @@ namespace oocsi {
 
     // Buffer for data received from UART.
     let rxData = ""
-
-
 
     /**
      * Send AT command and wait for response.
