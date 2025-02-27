@@ -95,6 +95,8 @@ namespace oocsi {
         // try parse line
         try {
             const jsonString = line.substr(line.indexOf('{'));
+            basic.showString("ccc ")
+            basic.showString(jsonString)
             lastMessage = JSON.parse(jsonString)
             return true
         } catch(err) {
@@ -115,6 +117,7 @@ namespace oocsi {
     //% blockId=oocsi_get
     //% block="get value from last OOCSI message"
     export function get(key: string, defaultValue: string) : string {
+        basic.showString("ggg ")
 
         return convertToText(lastMessage != undefined ? JSON.stringify(lastMessage) : defaultValue);
 //        return convertToText(lastMessage != undefined && lastMessage[key] ? lastMessage[key] : defaultValue);
