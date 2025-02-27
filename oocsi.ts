@@ -85,12 +85,14 @@ namespace oocsi {
         // Make sure the WiFi is connected.
         if (isWifiConnected() == false) return false
 
-        let line = getResponse("", 500)
+        let line: string = getResponse("", 500)
 
         // nothing received?
         if(line.trim().length == 0) {
             return false;
         }
+
+        send("debug", "data", line);
 
         // try parse line
         try {
