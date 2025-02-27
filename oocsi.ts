@@ -94,7 +94,7 @@ namespace oocsi {
 
         // try parse line
         try {
-            const jsonString = input.substring(input.indexOf('{'));
+            const jsonString = line.substring(line.indexOf('{'));
             lastMessage = JSON.parse(jsonString)
             return true
         } catch(err) {
