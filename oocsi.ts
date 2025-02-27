@@ -87,12 +87,14 @@ namespace oocsi {
 
         let line: string = getResponse("", 500)
 
-        // nothing received?
-        if(line.trim().length == 0) {
-            return false;
-        }
+        pause(500);
 
         send("debug", "data", line);
+
+        // nothing received?
+        if(line == undefined || line.trim().length == 0) {
+            return false;
+        }
 
         // try parse line
         try {
