@@ -25,7 +25,7 @@ namespace oocsi {
 
         pause(500)
 
-        let data = name + "\r\n"
+        let data = name + "(JSON)\r\n"
         sendCommand("AT+CIPSEND=" + (data.length + 2))
         sendCommand(data)
 
