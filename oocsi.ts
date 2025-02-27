@@ -98,6 +98,8 @@ namespace oocsi {
             lastMessage = JSON.parse(jsonString)
             return true
         } catch(err) {
+            basic.showString("xxx")
+            basic.showString(err)
             return false            
         }
 
