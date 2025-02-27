@@ -97,16 +97,15 @@ namespace oocsi {
         }
 
         // respond to ping
-        if(line.include('ping') && line.indexOf('{') == -1) {
-            setTimeout(() => {
-                // Make sure the WiFi is connected.
-                if (isWifiConnected() == false) return
+        if(line.includes('ping') && line.indexOf('{') == -1) {
 
-                // send response
-                let data = `.\r\n`
-                sendCommand("AT+CIPSEND=" + (data.length + 2))
-                sendCommand(data)
-            }, 200)
+            // Make sure the WiFi is connected.
+            if (isWifiConnected() == false) return
+
+            // send response
+            let data = `.\r\n`
+            sendCommand("AT+CIPSEND=" + (data.length + 2))
+            sendCommand(data)
 
             return false
         }
