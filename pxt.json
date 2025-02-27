@@ -9,11 +9,9 @@
     "files": [
         "README.md",
         "main.ts",
-        "oocsi.ts"
+        "esp8266.ts"
     ],
-    "testFiles": [
-        "test.ts"
-    ],
+    "testFiles": [],
     "public": true,
     "targetVersions": {
         "target": "5.0.12",
