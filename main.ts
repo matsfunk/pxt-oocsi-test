@@ -100,7 +100,7 @@ namespace oocsi {
         if(line.includes('ping') && line.indexOf('{') == -1) {
 
             // Make sure the WiFi is connected.
-            if (isWifiConnected() == false) return
+            if (isWifiConnected() == false) return false
 
             // send response
             let data = `.\r\n`
