@@ -85,11 +85,7 @@ namespace oocsi {
         // Make sure the WiFi is connected.
         if (isWifiConnected() == false) return false
 
-        let line: string = getResponse("", 500)
-
-        pause(500);
-
-        send("debug", "data", line);
+        let line: string = getResponse("+IPD", 500)
 
         // nothing received?
         if(line == undefined || line.trim().length == 0) {
@@ -98,12 +94,13 @@ namespace oocsi {
 
         // try parse line
         try {
-            lastMessage = JSON.parse(line)
+            const jsonString = input.substring(input.indexOf('{'));
+            lastMessage = JSON.parse(jsonString)
             return true
         } catch(err) {
             return false            
         }
-        
+
     }
 
     /**
