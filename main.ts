@@ -92,8 +92,23 @@ namespace oocsi {
         let line: string = getResponse("+IPD", 500)
 
         // nothing received?
-        if(line == undefined || line.trim().length == 0 || line.indexOf('{') == -1) {
+        if(line == undefined || line.trim().length == 0) {
             return false;
+        }
+
+        // respond to ping
+        if(line.include('ping') && line.indexOf('{') == -1) {
+            setTimeout(() => {
+                // Make sure the WiFi is connected.
+                if (isWifiConnected() == false) return
+
+                // send response
+                let data = `.\r\n`
+                sendCommand("AT+CIPSEND=" + (data.length + 2))
+                sendCommand(data)
+            }, 200)
+
+            return false
         }
 
         // try parse line

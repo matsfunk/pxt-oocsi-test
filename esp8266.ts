@@ -114,6 +114,9 @@ namespace oocsi {
             }
         }
 
+        // erase everything else
+        rxData = ""
+
         return responseLine
     }
 
