@@ -88,13 +88,13 @@ namespace oocsi {
         let line: string = getResponse("+IPD", 500)
 
         // nothing received?
-        if(line == undefined || line.trim().length == 0) {
+        if(line == undefined || line.trim().length == 0 || line.indexOf('{') == -1) {
             return false;
         }
 
         // try parse line
         try {
-            const jsonString = line.substring(line.indexOf('{'));
+            const jsonString = line.substr(line.indexOf('{'));
             lastMessage = JSON.parse(jsonString)
             return true
         } catch(err) {
