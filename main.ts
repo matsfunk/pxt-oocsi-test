@@ -132,9 +132,11 @@ namespace oocsi {
     //% blockId=oocsi_get
     //% block="get value from last OOCSI message"
     export function get(key: string, defaultValue: string) : string {
-
-        return convertToText(lastMessage != undefined && lastMessage[key] ? lastMessage[key] : defaultValue);
-        
+        try {
+            return convertToText(lastMessage != undefined && lastMessage[key] ? lastMessage[key] : defaultValue)
+        } catch(err) {
+            return defaultValue
+        }
     }
 
 }
