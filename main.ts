@@ -165,9 +165,12 @@ namespace oocsi {
     //% blockId=oocsi_check
     //% block="check OOCSI"
     export function check() : boolean {
-
-        return newData && lastMessage != undefined
-
+        if(newData) {
+            newData = false
+            return lastMessage != undefined
+        } else {
+            return false
+        }
     }
 
 
