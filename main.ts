@@ -39,10 +39,14 @@ namespace oocsi {
 
         serial.onDataReceived("\n", () => {
 
+            led.plot(0, 0)
+
             // small delay before send
             pause(10)
 
             let line: string = getResponse("+IPD", 500)
+
+            led.unplot(0, 0)
 
             // nothing received?
             if(line == undefined || line.trim().length == 0) {
@@ -86,7 +90,7 @@ namespace oocsi {
     //% weight=19
     //% blockGap=8
     //% blockId=oocsi_send
-    //% block="send to Channel %channel Key %key Value %value "
+    //% block="send to Channel %channel Key %key Value %value"
     export function send(channel: string, key: string, value: string) {
 
         // Make sure the WiFi is connected.
@@ -109,7 +113,7 @@ namespace oocsi {
     //% weight=18
     //% blockGap=8
     //% blockId=oocsi_subscribe
-    //% block="subscribe to OOCSI channel %channel
+    //% block="subscribe to OOCSI channel %channel"
     export function subscribe(channel: string) {
 
         // Make sure the WiFi is connected.
