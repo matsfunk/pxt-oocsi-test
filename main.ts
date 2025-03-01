@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Functions for OOCSI
+ * MakeCode extension for OOCSI via ESP8266 Wifi module.
  *
- * Company: Mathias Funk, Industrial Design, TU/e
+ * Org:     Mathias Funk, Industrial Design, Eindhoven University of Technology
  * Website: https://oocsi.net
  * Email:   m.funk@tue.nl
  *******************************************************************************/
@@ -9,10 +9,13 @@
 /**
  * Blocks for OOCSI connectivity via ESP8266 WiFi module.
  */
-//% weight=10 color=#9236A4 icon="\uf1eb" block="OOCSI ESP8266"
+//% weight=10 color=#9236A4 icon="\uf1eb" block="OOCSI"
 namespace oocsi {
 
+    // last data as object
     let lastMessage : { [key: string] : { value: any } } = {};
+
+    // flag that new data has arrived
     let newData = false;
 
     /**
@@ -83,7 +86,7 @@ namespace oocsi {
     //% weight=19
     //% blockGap=8
     //% blockId=oocsi_send
-    //% block="send Key %key Value %value to OOCSI channel %channel"
+    //% block="send to Channel %channel Key %key Value %value "
     export function send(channel: string, key: string, value: string) {
 
         // Make sure the WiFi is connected.
