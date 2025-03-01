@@ -39,13 +39,14 @@ namespace oocsi {
 
         serial.onDataReceived("\n", () => {
 
+            led.plot(0, 0)
+
             // small delay before send
             pause(10)
 
             let line: string = getResponse("+IPD", 500)
 
-            // another small delay
-            pause(5)
+            led.unplot(0, 0)
 
             // nothing received?
             if(line == undefined || line.trim().length == 0) {
