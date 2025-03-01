@@ -37,7 +37,7 @@ namespace oocsi {
         sendCommand("AT+CIPSEND=" + (data.length + 2))
         sendCommand(data)
 
-        serial.onDataReceived("\n", receiveData);
+        //serial.onDataReceived("\n", receiveData);
     }
 
 
@@ -97,6 +97,10 @@ namespace oocsi {
     //% blockId=oocsi_check
     //% block="check OOCSI"
     export function check() : boolean {
+
+        // run data receive
+        receiveData()
+
         if(newData) {
             newData = false
             return true //lastMessage != undefined
@@ -135,7 +139,7 @@ namespace oocsi {
         let line: string = getResponse("+IPD", 500)
 
         // ensure that there won't be a read from incompletely parsed data
-        newData = false
+        //newData = false
 
         // nothing received?
         if(line == undefined || line.trim().length == 0) {
