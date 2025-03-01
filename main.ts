@@ -44,6 +44,9 @@ namespace oocsi {
 
             let line: string = getResponse("+IPD", 500)
 
+            // another small delay
+            pause(5)
+
             // nothing received?
             if(line == undefined || line.trim().length == 0) {
                 return;
