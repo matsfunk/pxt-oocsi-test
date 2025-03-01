@@ -85,6 +85,7 @@ namespace oocsi {
     //% blockHidden=true
     //% blockId=esp8266_get_response
     export function getResponse(response: string, timeout: number = 100): string {
+        const DELIM = "\n";
         let responseLine = ""
         let timestamp = input.runningTime()
         while (true) {
@@ -99,18 +100,18 @@ namespace oocsi {
 
             // Read until the end of the line.
             rxData += serial.readString()
-            if (rxData.includes("\r\n")) {
+            if (rxData.includes(DELIM)) {
                 // Check if expected response received.
-                if (rxData.slice(0, rxData.indexOf("\r\n")).includes(response)) {
-                    responseLine = rxData.slice(0, rxData.indexOf("\r\n"))
+                if (rxData.slice(0, rxData.indexOf(DELIM)).includes(response)) {
+                    responseLine = rxData.slice(0, rxData.indexOf(DELIM))
 
                     // Trim the Rx data for next call.
-                    rxData = rxData.slice(rxData.indexOf("\r\n") + 2)
+                    rxData = rxData.slice(rxData.indexOf(DELIM) + 1)
                     break
                 }
 
                 // Trim the Rx data before loop again.
-                rxData = rxData.slice(rxData.indexOf("\r\n") + 2)
+                rxData = rxData.slice(rxData.indexOf(DELIM) + 1)
             }
         }
 

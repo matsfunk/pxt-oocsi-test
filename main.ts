@@ -60,8 +60,11 @@ namespace oocsi {
             // try parse line
             try {
                 const jsonString = line.substr(line.indexOf('{'));
-                lastMessage = JSON.parse(jsonString)
-                newData = true
+                let temp = JSON.parse(jsonString)
+                if(temp != undefined && typeof temp == "object") {
+                    lastMessage = temp;
+                    newData = true
+                }
             } catch(err) {
                 lastMessage = {}            
             }
