@@ -139,7 +139,7 @@ namespace oocsi {
         let line: string = getResponse("+IPD", 500)
 
         // ensure that there won't be a read from incompletely parsed data
-        //newData = false
+        newData = false
 
         // nothing received?
         if(line == undefined || line.trim().length == 0) {
