@@ -14,6 +14,8 @@ namespace oocsi {
 
     let lastMessage : { [key: string] : { value: any } } = {};
     let newData = false;
+    
+    export let inputProcessed = 0;
 
     /**
      * Connect to OOCSI
@@ -42,6 +44,8 @@ namespace oocsi {
             if(line == undefined || line.trim().length == 0) {
                 return;
             }
+
+            inputProcessed++
 
             // respond to ping
             if(line.includes('ping') && !line.includes('{')) {
