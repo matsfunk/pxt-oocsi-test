@@ -42,6 +42,8 @@ namespace oocsi {
             led.plotBrightness(1, 0, 0)
             led.plotBrightness(2, 0, 0)
             led.plotBrightness(3, 0, 0)
+            
+            pause(10);
 
             let line: string = getResponse("+IPD", 500)
 
