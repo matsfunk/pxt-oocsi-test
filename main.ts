@@ -167,7 +167,7 @@ namespace oocsi {
     export function check() : boolean {
         if(newData) {
             newData = false
-            return lastMessage != undefined
+            return true //lastMessage != undefined
         } else {
             return false
         }
