@@ -64,7 +64,7 @@ namespace oocsi {
             // try parse line
             try {
                 const jsonString = line.substr(line.indexOf('{'));
-                let temp = JSON.parse(jsonString.clone())
+                let temp = JSON.parse(jsonString)
                 if(temp != undefined && typeof temp === "object") {
                     lastMessage = temp;
                     newData = true
