@@ -14,7 +14,7 @@ namespace oocsi {
 
     let lastMessage : { [key: string] : { value: any } } = {};
     let newData = false;
-    
+
     export let inputProcessed = 0;
 
     /**
@@ -36,7 +36,7 @@ namespace oocsi {
         sendCommand("AT+CIPSEND=" + (data.length + 2))
         sendCommand(data)
 
-        serial.onDataReceived("\r\n", () => {
+        serial.onDataReceived("\n", () => {
 
             let line: string = getResponse("+IPD", 500)
 
@@ -45,10 +45,10 @@ namespace oocsi {
                 return;
             }
 
-            inputProcessed++
-
             // respond to ping
             if(line.includes('ping') && !line.includes('{')) {
+
+                inputProcessed++
 
                 // // Make sure the WiFi is connected.
                 // if (isWifiConnected() == false) return
@@ -64,8 +64,8 @@ namespace oocsi {
             // try parse line
             try {
                 const jsonString = line.substr(line.indexOf('{'));
-                let temp = JSON.parse(jsonString)
-                if(temp != undefined && typeof temp == "object") {
+                let temp = JSON.parse(jsonString.clone())
+                if(temp != undefined && typeof temp === "object") {
                     lastMessage = temp;
                     newData = true
                 }
