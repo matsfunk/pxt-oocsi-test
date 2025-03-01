@@ -13,6 +13,7 @@
 namespace oocsi {
 
     let lastMessage : { [key: string] : { value: any } } = {};
+    let newData = false;
 
     /**
      * Connect to OOCSI
@@ -33,6 +34,39 @@ namespace oocsi {
         sendCommand("AT+CIPSEND=" + (data.length + 2))
         sendCommand(data)
 
+        serial.onDataReceived("\r\n", () => {
+
+            let line: string = getResponse("+IPD", 500)
+
+            // nothing received?
+            if(line == undefined || line.trim().length == 0) {
+                return;
+            }
+
+            // respond to ping
+            if(line.includes('ping') && !line.includes('{')) {
+
+                // // Make sure the WiFi is connected.
+                // if (isWifiConnected() == false) return
+
+                // // send response
+                // let data = `.\r\n`
+                // sendCommand("AT+CIPSEND=" + (data.length + 2))
+                // sendCommand(data)
+
+                return
+            }
+
+            // try parse line
+            try {
+                const jsonString = line.substr(line.indexOf('{'));
+                lastMessage = JSON.parse(jsonString)
+                newData = true
+            } catch(err) {
+                lastMessage = {}            
+            }
+
+        });
     }
 
     /**
@@ -77,6 +111,52 @@ namespace oocsi {
 
     }
 
+    // /**
+    //  * Check for new incoming OOCSI messages
+    //  */
+    // //% weight=17
+    // //% blockGap=8
+    // //% blockId=oocsi_check
+    // //% block="check OOCSI"
+    // export function check() : boolean {
+
+    //     // Make sure the WiFi is connected.
+    //     if (isWifiConnected() == false) return false
+
+    //     let line: string = getResponse("+IPD", 500)
+
+    //     // nothing received?
+    //     if(line == undefined || line.trim().length == 0) {
+    //         return false;
+    //     }
+
+    //     // respond to ping
+    //     if(line.includes('ping') && !line.includes('{')) {
+
+    //         // // Make sure the WiFi is connected.
+    //         // if (isWifiConnected() == false) return false
+
+    //         // // send response
+    //         // let data = `.\r\n`
+    //         // sendCommand("AT+CIPSEND=" + (data.length + 2))
+    //         // sendCommand(data)
+
+    //         return false
+    //     }
+
+    //     // try parse line
+    //     try {
+    //         const jsonString = line.substr(line.indexOf('{'));
+    //         lastMessage = JSON.parse(jsonString)
+    //         return true
+    //     } catch(err) {
+    //         lastMessage = {}
+    //         return false            
+    //     }
+
+    // }
+
+
     /**
      * Check for new incoming OOCSI messages
      */
@@ -86,41 +166,10 @@ namespace oocsi {
     //% block="check OOCSI"
     export function check() : boolean {
 
-        // Make sure the WiFi is connected.
-        if (isWifiConnected() == false) return false
-
-        let line: string = getResponse("+IPD", 500)
-
-        // nothing received?
-        if(line == undefined || line.trim().length == 0) {
-            return false;
-        }
-
-        // respond to ping
-        if(line.includes('ping') && !line.includes('{')) {
-
-            // // Make sure the WiFi is connected.
-            // if (isWifiConnected() == false) return false
-
-            // // send response
-            // let data = `.\r\n`
-            // sendCommand("AT+CIPSEND=" + (data.length + 2))
-            // sendCommand(data)
-
-            return false
-        }
-
-        // try parse line
-        try {
-            const jsonString = line.substr(line.indexOf('{'));
-            lastMessage = JSON.parse(jsonString)
-            return true
-        } catch(err) {
-            lastMessage = {}
-            return false            
-        }
+        return newData && lastMessage != undefined
 
     }
+
 
     /**
      * Get a value from the last OOCSI message
