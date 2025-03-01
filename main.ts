@@ -38,12 +38,21 @@ namespace oocsi {
 
         serial.onDataReceived("\n", () => {
 
+            led.plotBrightness(0, 0, 0)
+            led.plotBrightness(1, 0, 0)
+            led.plotBrightness(2, 0, 0)
+            led.plotBrightness(3, 0, 0)
+
             let line: string = getResponse("+IPD", 500)
+
+            led.plotBrightness(0, 0, 255)
 
             // nothing received?
             if(line == undefined || line.trim().length == 0) {
                 return;
             }
+
+            led.plotBrightness(1, 0, 255)
 
             // respond to ping
             if(line.includes('ping') && !line.includes('{')) {
@@ -61,6 +70,8 @@ namespace oocsi {
                 return
             }
 
+            led.plotBrightness(2, 0, 255)
+
             // try parse line
             try {
                 const jsonString = line.substr(line.indexOf('{'));
@@ -69,6 +80,9 @@ namespace oocsi {
                     lastMessage = temp;
                     newData = true
                 }
+
+                led.plotBrightness(3, 0, 255)
+
             } catch(err) {
                 lastMessage = {}            
             }
