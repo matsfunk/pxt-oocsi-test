@@ -37,52 +37,53 @@ namespace oocsi {
         sendCommand("AT+CIPSEND=" + (data.length + 2))
         sendCommand(data)
 
-        serial.onDataReceived("\n", () => {
+        serial.onDataReceived("\n", receiveData);
+    }
 
-            // this is a hack for stability
-            led.toggle(0, 0)
+    function receiveData() {
+        // // this is a hack for stability
+        // led.toggle(0, 0)
 
-            // small delay before send
-            pause(10)
+        // small delay before send
+        pause(10)
 
-            let line: string = getResponse("+IPD", 500)
+        let line: string = getResponse("+IPD", 500)
 
-            // this is a hack for stability
-            led.toggle(0, 0)
+        // // this is a hack for stability
+        // led.toggle(0, 0)
 
-            newData = false
+        newData = false
 
-            // nothing received?
-            if(line == undefined || line.trim().length == 0) {
-                return;
+        // nothing received?
+        if(line == undefined || line.trim().length == 0) {
+            return;
+        }
+
+        // respond to ping
+        if(line.includes('ping') && !line.includes('{')) {
+
+            // // Make sure the WiFi is connected.
+            // if (isWifiConnected() == false) return
+
+            // // send response
+            // let data = `.\r\n`
+            // sendCommand("AT+CIPSEND=" + (data.length + 2))
+            // sendCommand(data)
+
+            return
+        }
+
+        // try parse line
+        try {
+            const jsonString = line.substr(line.indexOf('{'));
+            let temp = JSON.parse(jsonString)
+            if(temp != undefined && typeof temp === "object") {
+                lastMessage = temp;
+                newData = true
             }
-
-            // respond to ping
-            if(line.includes('ping') && !line.includes('{')) {
-
-                // // Make sure the WiFi is connected.
-                // if (isWifiConnected() == false) return
-
-                // // send response
-                // let data = `.\r\n`
-                // sendCommand("AT+CIPSEND=" + (data.length + 2))
-                // sendCommand(data)
-
-                return
-            }
-
-            // try parse line
-            try {
-                const jsonString = line.substr(line.indexOf('{'));
-                let temp = JSON.parse(jsonString)
-                if(temp != undefined && typeof temp === "object") {
-                    lastMessage = temp;
-                    newData = true
-                }
-            } catch(err) {
-                lastMessage = {}            
-            }
-        });
+        } catch(err) {
+            lastMessage = {}            
+        }        
     }
 
     /**
