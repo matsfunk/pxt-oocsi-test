@@ -40,51 +40,6 @@ namespace oocsi {
         serial.onDataReceived("\n", receiveData);
     }
 
-    function receiveData() {
-        // // this is a hack for stability
-        // led.toggle(0, 0)
-
-        // small delay before send
-        pause(10)
-
-        let line: string = getResponse("+IPD", 500)
-
-        // // this is a hack for stability
-        // led.toggle(0, 0)
-
-        newData = false
-
-        // nothing received?
-        if(line == undefined || line.trim().length == 0) {
-            return;
-        }
-
-        // respond to ping
-        if(line.includes('ping') && !line.includes('{')) {
-
-            // // Make sure the WiFi is connected.
-            // if (isWifiConnected() == false) return
-
-            // // send response
-            // let data = `.\r\n`
-            // sendCommand("AT+CIPSEND=" + (data.length + 2))
-            // sendCommand(data)
-
-            return
-        }
-
-        // try parse line
-        try {
-            const jsonString = line.substr(line.indexOf('{'));
-            let temp = JSON.parse(jsonString)
-            if(temp != undefined && typeof temp === "object") {
-                lastMessage = temp;
-                newData = true
-            }
-        } catch(err) {
-            lastMessage = {}            
-        }        
-    }
 
     /**
      * Send data to OOCSI channel
@@ -166,6 +121,52 @@ namespace oocsi {
         } catch(err) {
             return defaultValue
         }
+    }
+
+
+    /**
+     * Internal receive logic
+     */
+    function receiveData() {
+
+        // small delay before send
+        pause(10)
+
+        let line: string = getResponse("+IPD", 500)
+
+        // ensure that there won't be a read from incompletely parsed data
+        newData = false
+
+        // nothing received?
+        if(line == undefined || line.trim().length == 0) {
+            return;
+        }
+
+        // respond to ping
+        if(line.includes('ping') && !line.includes('{')) {
+
+            // // Make sure the WiFi is connected.
+            // if (isWifiConnected() == false) return
+
+            // // send response
+            // let data = `.\r\n`
+            // sendCommand("AT+CIPSEND=" + (data.length + 2))
+            // sendCommand(data)
+
+            return
+        }
+
+        // try parse line
+        try {
+            const jsonString = line.substr(line.indexOf('{'));
+            let temp = JSON.parse(jsonString)
+            if(temp != undefined && typeof temp === "object") {
+                lastMessage = temp;
+                newData = true
+            }
+        } catch(err) {
+            lastMessage = {}            
+        }        
     }
 
 }
