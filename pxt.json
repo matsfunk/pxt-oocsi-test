@@ -12,12 +12,7 @@
         "main.ts",
         "esp8266.ts"
     ],
-    "testFiles": [],
     "public": true,
-    "targetVersions": {
-        "target": "5.0.12",
-        "targetId": "microbit"
-    },
     "supportedTargets": [
         "microbit"
     ],

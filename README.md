@@ -10,9 +10,15 @@ To connect, send data, and receive data from the OOCSI network, you need to foll
     - Subscribe to an OOCSI channel with the channel `name`
     - Handle the incoming data from the channel
 
+
+## ~ hint
+
+For wiring instructions, see the guide by [LittleBirdElectronics](https://learn.littlebirdelectronics.com.au/guides/wifi-module-with-micro-bit).
+
+## ~
+
+
 You can follow the steps below or find a complete example at the bottom. The individual steps are given in TypeScript (Python will look very similar). The Blocks diagram for the full example is provided at the end.
-
-
 
 ## 1. Initialization (Selecting UART Pins and Baudrate)
 
