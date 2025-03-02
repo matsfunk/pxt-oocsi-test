@@ -28,3 +28,6 @@ if (!oocsi.isWifiConnected()) {
 // Connect to WiFi router.
 // Show sad face if failed.
 oocsi.connect(OOCSI_SERVER, OOCSI_NAME)
+
+
+// TOOD test send and receive
