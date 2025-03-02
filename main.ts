@@ -126,7 +126,7 @@ namespace oocsi {
     //% weight=16
     //% blockGap=8
     //% blockId=oocsi_get
-    //% block="get value from last OOCSI message"
+    //% block="get value of %key or return %defaultValue"
     export function get(key: string, defaultValue: string) : string {
         try {
             return convertToText(lastMessage != undefined && lastMessage[key] ? lastMessage[key] : defaultValue)

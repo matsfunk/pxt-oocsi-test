@@ -122,13 +122,31 @@ if(oocsi.check()) {
 }
 ```
 
+After the call to `oocsi.get()`, you will have a string value which you might need to convert into a boolean or number value, depending on what you have sent. 
+
+And that's it. Here comes a full example:
 
 
 ## Full example
 
+The full example is presented in three versions, as blocks, in JavaScript/TypeScript and in Python.
 
+### Blocks
+
+
+
+
+### JavaScript/TypeScript
 
 ```typescript
+oocsi.connect("super.oocsi.net", "MicroBit_Test_##")
+```
+
+
+
+### Python
+
+```python
 oocsi.connect("super.oocsi.net", "MicroBit_Test_##")
 ```
 
