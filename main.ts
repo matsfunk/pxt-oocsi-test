@@ -24,7 +24,7 @@ namespace oocsi {
      * @param name Client name. eg: "MicroBit_client_####"
      */
     //% weight=20
-    //% blockGap=20
+    //% blockGap=30
     //% blockId=oocsi_connect
     //% block="connect to OOCSI server %server with name %name"
     export function connect(server: string, name: string) {
@@ -48,7 +48,7 @@ namespace oocsi {
      * @param value Value to send.
      */
     //% weight=19
-    //% blockGap=20
+    //% blockGap=30
     //% blockId=oocsi_send
     //% block="send to Channel %channel Key %key Value %value"
     export function send(channel: string, key: string, value: any) {

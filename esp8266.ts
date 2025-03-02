@@ -158,7 +158,7 @@ namespace oocsi {
      * Return true if the ESP8266 is already initialized.
      */
     //% weight=29
-    //% blockGap=20
+    //% blockGap=30
     //% blockId=esp8266_is_esp8266_initialized
     //% block="ESP8266 initialized"
     export function isESP8266Initialized(): boolean {
@@ -188,7 +188,7 @@ namespace oocsi {
      * Return true if the ESP8266 is connected to WiFi router.
      */
     //% weight=27
-    //% blockGap=20
+    //% blockGap=30
     //% blockId=esp8266_is_wifi_connected
     //% block="WiFi connected"
     export function isWifiConnected(): boolean {
