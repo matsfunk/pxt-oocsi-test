@@ -1,6 +1,6 @@
 {
     "name": "pxt-oocsi-test",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "MakeCode Package for OOCSI using ESP8266 WiFi Module",
     "license": "MIT",
     "authors": ["Mathias Funk"],
