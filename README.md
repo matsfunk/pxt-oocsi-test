@@ -57,6 +57,7 @@ With the WIFI connected, you can finally connect to an OOCSI server. This OOCSI 
 
 
 ```typescript
+// connect to the server "super.oocsi.net" with the name "MicroBit_Test_##"
 oocsi.connect("super.oocsi.net", "MicroBit_Test_##")
 ```
 
@@ -68,14 +69,69 @@ When you connect to an OOCSI server, the extension will automatically start a ba
 Sending data to an OOCSI channel is straight-forward: we just need the channel `name`, the `key` and `value` of the data. For example, we have a variable "position" that holds a value of 90 (degrees), then we can send that to the channel "positionChannel" with the key "position" like this:
 
 ```typescript
-// assuming we have a variable with position values
-let position = 90;
+// assuming we have a variable with position value
+let positionValue = 90;
 
-// send the position values to the OOCSI channel "positionChannel" with the key "position"
-oocsi.send('positionChannel', 'position', convertToText(position))
+// send the position value to the OOCSI channel "positionChannel" with the key "position"
+oocsi.send('positionChannel', 'position', positionValue)
 ```
 
-Note that `name`, `key` and `value` are strings, that means, you need to convert numbers into string before sending.
+Note that `name` and `key` are strings, `value` can be anything, a boolean value, a number, a string, or even an object which will be converted into a compatible format before sending off.
+
+
+## 5. Receive data from an OOCSI server
+
+Receiving data with your MicroBit consists of two steps: first you need to subscribe to a channel, then you need to handle the incoming channel messages. Let's do this one by one.
+
+
+### Subscribe to an OOCSI channel
+
+Subscribing to a channel on the OOCSI network is as easy as specifying the channel `name`. In the following example we subscribe to the OOCSI channel "testchannel".
+
+```typescript
+// subscribe to "testchannel"
+oocsi.subscribe("testchannel")
+```
+
+
+### Handle incoming OOCSI messages
+
+After subscribing to a channel, you need to handle the incoming messages. First __check__ whether there is a new mesage to process, then __get__ the data in the message.
+
+```typescript
+// check if there is new data
+if(oocsi.check()) {
+    // this code here runs if there is indeed new data
+    // ... 
+}
+```
+
+We usually wrap the `oocsi.check()` in an `if` statement so the following code only runs if there is really new data. Retrieving a piece of data from the latest OOCSI message uses the function `oocsi.get()` which takes the `key` of the data and a default value in case the data is not contained in the latest message.
+
+```typescript
+// check if there is new data
+if(oocsi.check()) {
+    // this code here runs if there is indeed new data...
+
+    // get data with the key "position" from the last OOCSI message, 
+    // default value is "-1" in case the key is not contained
+    let position = oocsi.get('position', "-1")
+
+    // we might need to convert the string value in position to a number
+    let positionValue = parseInt(position)
+}
+```
+
+
+
+## Full example
+
+
+
+```typescript
+oocsi.connect("super.oocsi.net", "MicroBit_Test_##")
+```
+
 
 
 ## License

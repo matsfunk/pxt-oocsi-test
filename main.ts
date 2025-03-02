@@ -65,8 +65,10 @@ namespace oocsi {
             valueStr = convertToText(value)
         } else if (typeof value == 'number') {
             valueStr = convertToText(value)
-        } else {
+        } else if (typeof value == 'string') {
             valueStr = `"${convertToText(value)}"`
+        } else {
+            valueStr = JSON.stringify(value)
         }
 
         // prepare and send data
