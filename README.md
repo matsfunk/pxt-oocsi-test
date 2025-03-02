@@ -130,15 +130,18 @@ And that's it. You are ready now for a few small examples:
 
 ## Full example
 
-The full example is presented in three versions, as blocks, in JavaScript/TypeScript and in Python.
+The full example is presented in three versions, as blocks, in JavaScript/TypeScript and in Python. The example first initializes the ESP8266, connects to a WIFI network then to an OOCSI server, and finally subscribes to the channel "testchannel". After that, the example runs through a loop to retrieve a data item "position" from incoming OOCSI messages. Further, the example registers two button handlers that each send messages to the channel "microbitChannel" when pressed.
 
 ### Blocks
 
-![blocks version of the full OOCSI example](assets/full_example.png)
+The full example in blocks view:
 
+![blocks version of the full OOCSI example](assets/full_example_blocks.png)
 
 
 ### JavaScript/TypeScript
+
+The full example in JavaScript/TypeScript view:
 
 ```typescript
 // init the ESP8266
@@ -148,7 +151,7 @@ oocsi.connectWiFi("my_ssid", "my_password")
 // if WIFI is connected
 if (oocsi.isWifiConnected()) {
     // connect to OOCSI server
-    oocsi.connect("super.oocsi.net", "microbit_test##")
+    oocsi.connect("super.oocsi.net", "MicroBit_Test_##")
     // subscribe to "testchannel"
     oocsi.subscribe("testchannel")
     // in a loop, ...
@@ -180,6 +183,8 @@ input.onButtonPressed(Button.B, function () {
 
 
 ### Python
+
+The full example in Python view:
 
 ```python
 # init the ESP8266
