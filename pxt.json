@@ -12,6 +12,7 @@
         "main.ts",
         "esp8266.ts"
     ],
+    "testFiles": [],
     "public": true,
     "supportedTargets": [
         "microbit"
