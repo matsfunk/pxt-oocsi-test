@@ -122,52 +122,6 @@ namespace oocsi {
     }
 
 
-
-    /**
-     * Format the encoding of special characters in the url.
-     * @param url The url that we want to format.
-     */
-    //% blockHidden=true
-    //% blockId=esp8266_format_url
-    export function formatUrl(url: string): string {
-        url = url.replaceAll("%", "%25")
-        url = url.replaceAll(" ", "%20")
-        url = url.replaceAll("!", "%21")
-        url = url.replaceAll("\"", "%22")
-        url = url.replaceAll("#", "%23")
-        url = url.replaceAll("$", "%24")
-        url = url.replaceAll("&", "%26")
-        url = url.replaceAll("'", "%27")
-        url = url.replaceAll("(", "%28")
-        url = url.replaceAll(")", "%29")
-        url = url.replaceAll("*", "%2A")
-        url = url.replaceAll("+", "%2B")
-        url = url.replaceAll(",", "%2C")
-        url = url.replaceAll("-", "%2D")
-        url = url.replaceAll(".", "%2E")
-        url = url.replaceAll("/", "%2F")
-        url = url.replaceAll(":", "%3A")
-        url = url.replaceAll(";", "%3B")
-        url = url.replaceAll("<", "%3C")
-        url = url.replaceAll("=", "%3D")
-        url = url.replaceAll(">", "%3E")
-        url = url.replaceAll("?", "%3F")
-        url = url.replaceAll("@", "%40")
-        url = url.replaceAll("[", "%5B")
-        url = url.replaceAll("\\", "%5C")
-        url = url.replaceAll("]", "%5D")
-        url = url.replaceAll("^", "%5E")
-        url = url.replaceAll("_", "%5F")
-        url = url.replaceAll("`", "%60")
-        url = url.replaceAll("{", "%7B")
-        url = url.replaceAll("|", "%7C")
-        url = url.replaceAll("}", "%7D")
-        url = url.replaceAll("~", "%7E")
-        return url
-    }
-
-
-
     /**
      * Return true if the ESP8266 is already initialized.
      */
@@ -183,8 +137,8 @@ namespace oocsi {
 
     /**
      * Initialize the ESP8266.
-     * @param tx Tx pin of micro:bit. eg: SerialPin.P16
-     * @param rx Rx pin of micro:bit. eg: SerialPin.P15
+     * @param tx Tx pin of micro:bit. eg: SerialPin.P0
+     * @param rx Rx pin of micro:bit. eg: SerialPin.P1
      * @param baudrate UART baudrate. eg: BaudRate.BaudRate115200
      */
     //% weight=29

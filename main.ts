@@ -51,7 +51,7 @@ namespace oocsi {
     //% blockGap=8
     //% blockId=oocsi_send
     //% block="send to Channel %channel Key %key Value %value"
-    export function send(channel: string, key: string, value: string) {
+    export function send(channel: string, key: string, value: any) {
 
         // Make sure the WiFi is connected.
         if (isWifiConnected() == false) return
@@ -59,8 +59,18 @@ namespace oocsi {
         // small delay before send
         pause(10)
 
+        // convert value to JSON format
+        let valueStr;
+        if (typeof value == 'boolean') {
+            valueStr = convertToText(value)
+        } else if (typeof value == 'number') {
+            valueStr = convertToText(value)
+        } else {
+            valueStr = `"${convertToText(value)}"`
+        }
+
         // prepare and send data
-        let data = `sendjson ${channel} {"${key}": "${value}"}` + "\r\n"
+        let data = `sendjson ${channel} {"${key}": ${valueStr}}` + "\r\n"
         sendCommand("AT+CIPSEND=" + (data.length + 2))
         sendCommand(data)
 
