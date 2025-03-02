@@ -124,7 +124,8 @@ if(oocsi.check()) {
 
 After the call to `oocsi.get()`, you will have a string value which you might need to convert into a boolean or number value, depending on what you have sent. 
 
-And that's it. Here comes a full example:
+And that's it. You are ready now for a few small examples:
+
 
 
 ## Full example
@@ -133,13 +134,47 @@ The full example is presented in three versions, as blocks, in JavaScript/TypeSc
 
 ### Blocks
 
+![blocks version of the full OOCSI example](assets/full_example.png)
 
 
 
 ### JavaScript/TypeScript
 
 ```typescript
-oocsi.connect("super.oocsi.net", "MicroBit_Test_##")
+// init the ESP8266
+oocsi.init(SerialPin.P0, SerialPin.P1, BaudRate.BaudRate115200)
+// connect to WIFI
+oocsi.connectWiFi("my_ssid", "my_password")
+// if WIFI is connected
+if (oocsi.isWifiConnected()) {
+    // connect to OOCSI server
+    oocsi.connect("super.oocsi.net", "microbit_test##")
+    // subscribe to "testchannel"
+    oocsi.subscribe("testchannel")
+    // in a loop, ...
+    while (true) {
+        // check for new messages
+        if (oocsi.check()) {
+            // retrieve data item "position" as number and show it
+            basic.showNumber(parseInt(oocsi.get("position", "-1")))
+        }
+
+        // wait a bit
+        pause(100)
+    }
+}
+
+// on button A press
+input.onButtonPressed(Button.A, function () {
+    // send data "button: A" to "microbitChannel"
+    oocsi.send("microbitChannel", "button", "A")
+})
+// on button B press
+input.onButtonPressed(Button.B, function () {
+    // send data "button: A" to "microbitChannel"
+    oocsi.send("microbitChannel", "button", "B")
+})
+
 ```
 
 
@@ -147,7 +182,38 @@ oocsi.connect("super.oocsi.net", "MicroBit_Test_##")
 ### Python
 
 ```python
-oocsi.connect("super.oocsi.net", "MicroBit_Test_##")
+# init the ESP8266
+oocsi.init(SerialPin.P0, SerialPin.P1, BaudRate.BAUD_RATE115200)
+# connect to WIFI
+oocsi.connect_wi_fi("my_ssid", "my_passowrd")
+# if WIFI is connected
+if oocsi.is_wifi_connected():
+    # connect to OOCSI server
+    oocsi.connect("super.oocsi.net", "MicroBit_Test_##")
+    # subscribe to "testchannel"
+    oocsi.subscribe("testchannel")
+    # in a loop, ...
+    while True:
+        # check for new messages
+        if oocsi.check():
+            # retrieve data item "position" as number and show it
+            basic.show_number(int(oocsi.get("position", "-1")))
+        pause(100)
+
+# on button A press
+
+def on_button_pressed_a():
+    # send data "button: A" to "microbitChannel"
+    oocsi.send("microbitChannel", "button", "A")
+input.on_button_pressed(Button.A, on_button_pressed_a)
+
+# on button B press
+
+def on_button_pressed_b():
+    # send data "button: A" to "microbitChannel"
+    oocsi.send("microbitChannel", "button", "B")
+input.on_button_pressed(Button.B, on_button_pressed_b)
+
 ```
 
 

@@ -123,26 +123,13 @@ namespace oocsi {
 
 
     /**
-     * Return true if the ESP8266 is already initialized.
-     */
-    //% weight=30
-    //% blockGap=8
-    //% blockId=esp8266_is_esp8266_initialized
-    //% block="ESP8266 initialized"
-    export function isESP8266Initialized(): boolean {
-        return esp8266Initialized
-    }
-
-
-
-    /**
      * Initialize the ESP8266.
      * @param tx Tx pin of micro:bit. eg: SerialPin.P0
      * @param rx Rx pin of micro:bit. eg: SerialPin.P1
      * @param baudrate UART baudrate. eg: BaudRate.BaudRate115200
      */
-    //% weight=29
-    //% blockGap=40
+    //% weight=30
+    //% blockGap=8
     //% blockId=esp8266_init
     //% block="initialize ESP8266: Tx %tx Rx %rx Baudrate %baudrate"
     export function init(tx: SerialPin, rx: SerialPin, baudrate: BaudRate) {
@@ -168,10 +155,40 @@ namespace oocsi {
 
 
     /**
-     * Return true if the ESP8266 is connected to WiFi router.
+     * Return true if the ESP8266 is already initialized.
+     */
+    //% weight=29
+    //% blockGap=20
+    //% blockId=esp8266_is_esp8266_initialized
+    //% block="ESP8266 initialized"
+    export function isESP8266Initialized(): boolean {
+        return esp8266Initialized
+    }
+
+
+
+    /**
+     * Connect to WiFi router.
+     * @param ssid Your WiFi SSID.
+     * @param password Your WiFi password.
      */
     //% weight=28
     //% blockGap=8
+    //% blockId=esp8266_connect_wifi
+    //% block="connect to WiFi: SSID %ssid Password %password"
+    export function connectWiFi(ssid: string, password: string) {
+        // Set to station mode.
+        sendCommand("AT+CWMODE=1", "OK")
+
+        // Connect to WiFi router.
+        sendCommand("AT+CWJAP=\"" + ssid + "\",\"" + password + "\"", "OK", 20000)
+    }
+    
+    /**
+     * Return true if the ESP8266 is connected to WiFi router.
+     */
+    //% weight=27
+    //% blockGap=20
     //% blockId=esp8266_is_wifi_connected
     //% block="WiFi connected"
     export function isWifiConnected(): boolean {
@@ -191,23 +208,4 @@ namespace oocsi {
         }
     }
 
-
-
-    /**
-     * Connect to WiFi router.
-     * @param ssid Your WiFi SSID.
-     * @param password Your WiFi password.
-     */
-    //% weight=27
-    //% blockGap=8
-    //% blockId=esp8266_connect_wifi
-    //% block="connect to WiFi: SSID %ssid Password %password"
-    export function connectWiFi(ssid: string, password: string) {
-        // Set to station mode.
-        sendCommand("AT+CWMODE=1", "OK")
-
-        // Connect to WiFi router.
-        sendCommand("AT+CWJAP=\"" + ssid + "\",\"" + password + "\"", "OK", 20000)
-    }
-    
 }
